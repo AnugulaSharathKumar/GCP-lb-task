@@ -1,75 +1,42 @@
 #!/bin/bash
 set -e
 
-approve_and_run() {
-    STAGE_NAME="$1"
-    SCRIPT_PATH="$2"
+echo "=============================="
+echo "Checking Terraform installation"
+echo "=============================="
 
-    echo "========================================"
-    echo "Stage: $STAGE_NAME"
-    echo "Script: $SCRIPT_PATH"
-    echo "========================================"
-
-    read -r -p "Do you want to execute this step? (yes/no): " CONFIRM
-
-    case "$CONFIRM" in
-        yes|YES|y|Y)
-            echo "✅ Executing $STAGE_NAME..."
-            bash "$SCRIPT_PATH"
-            ;;
-        no|NO|n|N)
-            echo "⏭️  Skipping $STAGE_NAME"
-            ;;
-        *)
-            echo "❌ Invalid input. Skipping $STAGE_NAME"
-            ;;
-    esac
-}
-
-########################################
-# Stage -1 : Terraform Installation
-########################################
-approve_and_run \
-"Terraform Installation" \
-"./workspaces/GCP-lb-task/gcp-terraform/scripts/terraform_installation.sh"
-
-########################################
-# Stage -2 : GCP SDK Installation
-########################################
-approve_and_run \
-"GCP SDK Installation" \
-"./workspaces/GCP-lb-task/gcp-terraform/scripts/Installing_gcpsdk.sh"
-
-########################################
-# Stage -3 : Project Setup
-########################################
-approve_and_run \
-"Project Setup" \
-"./workspaces/GCP-lb-task/gcp-terraform/scripts/setup.sh"
-
-########################################
-# Stage -4 : Terraform Deploy
-########################################
-approve_and_run \
-"Terraform Deployment" \
-"./workspaces/GCP-lb-task/gcp-terraform/scriptsdeploy.sh"
-
-########################################
-# Stage -5 : Terraform Destroy (Extra Safe)
-########################################
-echo "========================================"
-echo "⚠️  DESTROY STAGE (High Risk)"
-echo "========================================"
-
-read -r -p "Do you REALLY want to destroy infrastructure? Type YES to continue: " DESTROY_CONFIRM
-
-if [[ "$DESTROY_CONFIRM" == "YES" ]]; then
-    echo "🔥 Destroy confirmed"
-    cd ./workspaces/GCP-lb-task/gcp-terraform || exit 1
-    terraform destroy -auto-approve
-else
-    echo "❌ Destroy skipped"
+if command -v terraform >/dev/null 2>&1; then
+    echo "✅ Terraform is already installed."
+    terraform version
+    exit 0
 fi
 
-echo "========================================"
-echo "🎉 All approved stages completed safely"
+echo "❌ Terraform not found. Installing Terraform..."
+echo
+
+###########################################################################
+echo "Update system packages"
+sudo apt update -y
+sudo apt install -y gnupg software-properties-common curl
+
+###########################################################################
+echo "Add HashiCorp GPG key"
+curl -fsSL https://apt.releases.hashicorp.com/gpg | \
+sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+###########################################################################
+echo "Add HashiCorp repository"
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+###########################################################################
+echo "Install Terraform"
+sudo apt update -y
+sudo apt install terraform -y
+
+###########################################################################
+echo "Verify installation"
+terraform version
+
+echo "🎉 Terraform installation completed successfully."
