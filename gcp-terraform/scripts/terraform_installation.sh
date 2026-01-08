@@ -20,3 +20,4 @@ sudo apt install terraform -y
 ###########################################################################
 echo "Verify installation"
 terraform version
+###
