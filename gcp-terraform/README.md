@@ -1,4 +1,4 @@
-# GCP Regional Internal Load Balancer + Managed Instance Group
+## GCP Regional Internal Load Balancer + Managed Instance Group
 
 This project deploys a regional Managed Instance Group (MIG) attached to a regional Internal TCP load balancer on Google Cloud Platform using Terraform.
 
