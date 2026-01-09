@@ -1,0 +1,112 @@
+
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      destroy:
+        description: "Set to YES to run terraform destroy"
+        required: false
+        default: "NO"
+
+env:
+  GCP_PROJECT_ID: project-3e800f45-77e7-454a-a2b
+  TF_INPUT: false
+  TF_IN_AUTOMATION: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Stage 0: Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Stage 1: Terraform Installation (official setup)
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.5
+
+      # OPTIONAL: Keep your custom terraform installation script if needed
+      - name: (Optional) Run custom terraform installation script
+        if: ${{ always() }}
+        run: |
+          chmod +x ./terraform_installation.sh || true
+          ./terraform_installation.sh || true
+
+      # Stage 2: GCP Auth & SDK (non-interactive)
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: ">= 446.0.0"
+
+      # OPTIONAL: Keep your custom GCP SDK install script if needed
+      - name: (Optional) Run custom GCP SDK installation script
+        if: ${{ always() }}
+        run: |
+          chmod +x ./Installing_gcpsdk.sh || true
+          ./Installing_gcpsdk.sh || true
+
+      # Stage 3: Project Setup via gcloud and your init script
+      - name: Configure gcloud project
+        run: gcloud config set project "${{ env.GCP_PROJECT_ID }}"
+
+      - name: Run Initializing_My_project.sh
+        run: |
+          chmod +x gcp-terraform/scripts/Initializing_My_project.sh
+          gcp-terraform/scripts/Initializing_My_project.sh "${{ env.GCP_PROJECT_ID }}"
+        # If your script needs environment variables, you can pass them here:
+        # env:
+        #   SOME_VAR: some-value
+
+      # (Optional) If you still want to run your original setup.sh
+      - name: (Optional) Run project setup script
+        run: |
+          chmod +x ./setup.sh || true
+          ./setup.sh "${{ env.GCP_PROJECT_ID }}" || true
+
+      # Stage 4: Terraform Deploy
+      # If your Terraform lives in a subfolder, set working-directory accordingly.
+      - name: Terraform Init
+        run: terraform init
+        # working-directory: gcp-terraform/infra
+
+      - name: Terraform Validate
+        run: terraform validate
+        # working-directory: gcp-terraform/infra
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -out=tfplan
+        # working-directory: gcp-terraform/infra
+
+      - name: Terraform Apply
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.destroy != 'YES' }}
+        run: terraform apply -input=false -auto-approve tfplan
+        # working-directory: gcp-terraform/infra
+
+      # Stage 5: Terraform Destroy (Conditional via workflow_dispatch input)
+      - name: Terraform Destroy (HIGH RISK)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.destroy == 'YES' }}
+        run: terraform destroy -input=false -auto-approve
+        # working-directory: gcp-terraform/infra
+
+      # Misc: Demo steps you had
+      - name: Run a one-line script
+        run: echo "Hello, world!"
+
+      - name: Run a multi-line script
+        run: |
+          echo "Add other actions to build,"
+          echo "test, and deploy your project."
+``
