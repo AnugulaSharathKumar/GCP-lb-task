@@ -37,8 +37,8 @@ jobs:
       - name: (Optional) Run custom terraform installation script
         if: ${{ always() }}
         run: |
-          chmod +x ./terraform_installation.sh || true
-          ./terraform_installation.sh || true
+          chmod +x ./GCP-lb-task/gcp-terraform/scripts/terraform_installation.sh || true
+          ./GCP-lb-task/gcp-terraform/scripts/terraform_installation.sh || true
 
       # Stage 2: GCP Auth & SDK (non-interactive)
       - name: Authenticate to Google Cloud
@@ -55,8 +55,8 @@ jobs:
       - name: (Optional) Run custom GCP SDK installation script
         if: ${{ always() }}
         run: |
-          chmod +x ./Installing_gcpsdk.sh || true
-          ./Installing_gcpsdk.sh || true
+          chmod +x ./GCP-lb-task/gcp-terraform/scripts/Installing_gcpsdk.sh || true
+          ./GCP-lb-task/gcp-terraform/scripts/Installing_gcpsdk.sh || true
 
       # Stage 3: Project Setup via gcloud and your init script
       - name: Configure gcloud project
@@ -64,8 +64,8 @@ jobs:
 
       - name: Run Initializing_My_project.sh
         run: |
-          chmod +x gcp-terraform/scripts/Initializing_My_project.sh
-          gcp-terraform/scripts/Initializing_My_project.sh "${{ env.GCP_PROJECT_ID }}"
+          chmod +x ./GCP-lb-task/gcp-terraform/scripts/Initializing_My_project.sh
+          ./GCP-lb-task/gcp-terraform/scripts/Initializing_My_project.sh "${{ env.GCP_PROJECT_ID }}"
         # If your script needs environment variables, you can pass them here:
         # env:
         #   SOME_VAR: some-value
@@ -73,8 +73,8 @@ jobs:
       # (Optional) If you still want to run your original setup.sh
       - name: (Optional) Run project setup script
         run: |
-          chmod +x ./setup.sh || true
-          ./setup.sh "${{ env.GCP_PROJECT_ID }}" || true
+          chmod +x ./GCP-lb-task/gcp-terraform/scripts/setup.sh || true
+          ./GCP-lb-task/gcp-terraform/scripts/setup.sh "${{ env.GCP_PROJECT_ID }}" || true
 
       # Stage 4: Terraform Deploy
       # If your Terraform lives in a subfolder, set working-directory accordingly.
