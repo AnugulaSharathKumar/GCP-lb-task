@@ -55,7 +55,7 @@ jobs:
       - name: (Optional) Run custom GCP SDK installation script
         if: ${{ always() }}
         run: |
-          chmod +x ./GCP-lb-task/gcp-terraform/scripts/Installing_gcpsdk.sh || true
+          chmod +x .//gcp-terraform/scripts/Installing_gcpsdk.sh || true
           ./GCP-lb-task/gcp-terraform/scripts/Installing_gcpsdk.sh || true
 
       # Stage 3: Project Setup via gcloud and your init script
@@ -64,8 +64,8 @@ jobs:
 
       - name: Run Initializing_My_project.sh
         run: |
-          chmod +x ./GCP-lb-task/gcp-terraform/scripts/Initializing_My_project.sh
-          ./GCP-lb-task/gcp-terraform/scripts/Initializing_My_project.sh "${{ env.GCP_PROJECT_ID }}"
+          chmod +x ./gcp-terraform/scripts/Initializing_My_project.sh
+          ./gcp-terraform/scripts/Initializing_My_project.sh "${{ env.GCP_PROJECT_ID }}"
         # If your script needs environment variables, you can pass them here:
         # env:
         #   SOME_VAR: some-value
