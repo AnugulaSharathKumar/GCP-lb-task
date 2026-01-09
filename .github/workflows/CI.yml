@@ -55,8 +55,8 @@ jobs:
       - name: (Optional) Run custom GCP SDK installation script
         if: ${{ always() }}
         run: |
-          chmod +x .//gcp-terraform/scripts/Installing_gcpsdk.sh || true
-          ./GCP-lb-task/gcp-terraform/scripts/Installing_gcpsdk.sh || true
+          chmod +x ./gcp-terraform/scripts/Installing_gcpsdk.sh || true
+          ./gcp-terraform/scripts/Installing_gcpsdk.sh || true
 
       # Stage 3: Project Setup via gcloud and your init script
       - name: Configure gcloud project
