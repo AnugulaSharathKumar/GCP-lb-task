@@ -7,7 +7,7 @@ set -e
 echo "========================================"
 echo "Stage -1 : Terraform Installation"
 echo "========================================"
-bash ./terraform_installation.sh
+#bash ./terraform_installation.sh
 
 ########################################
 # Stage -2 : GCP SDK Installation
@@ -15,7 +15,7 @@ bash ./terraform_installation.sh
 echo "========================================"
 echo "Stage -2 : GCP SDK Installation"
 echo "========================================"
-bash ./Installing_gcpsdk.sh
+#bash ./Installing_gcpsdk.sh
 
 ########################################
 # Stage -3 : Project Setup
@@ -23,10 +23,10 @@ bash ./Installing_gcpsdk.sh
 echo "========================================"
 echo "Stage -3 : Project Setup"
 echo "========================================"
-gcloud auth login
-gcloud auth application-default login
-gcloud config set project project-3e800f45-77e7-454a-a2b
-bash ./setup.sh project-3e800f45-77e7-454a-a2b
+#gcloud auth login
+#gcloud auth application-default login
+#gcloud config set project project-3e800f45-77e7-454a-a2b
+#bash ./setup.sh project-3e800f45-77e7-454a-a2b
 
 ########################################
 # Stage -4 : Terraform Deploy
