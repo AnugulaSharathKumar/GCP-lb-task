@@ -63,8 +63,9 @@ jobs:
         run: gcloud config set project "${{ env.GCP_PROJECT_ID }}"
 
       - name: Run Initializing_My_project.sh
-        run: |        
-          ./GCP-lb-task/gcp-terraform/scripts/Initializing_My_project.sh "${{ env.GCP_PROJECT_ID }}"
+        run: |
+          chmod +x ./gcp-terraform/scripts/Initializing_My_project.sh || true
+          ./gcp-terraform/scripts/Initializing_My_project.sh "${{ env.GCP_PROJECT_ID }}"
         # If your script needs environment variables, you can pass them here:
         # env:
         #   SOME_VAR: some-value
