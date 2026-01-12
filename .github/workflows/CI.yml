@@ -64,7 +64,7 @@ jobs:
 
       - name: Run Initializing_My_project.sh
         run: |        
-          ./gcp-terraform/scripts/Initializing_My_project.sh "${{ env.GCP_PROJECT_ID }}"
+          ./GCP-lb-task/gcp-terraform/scripts/Initializing_My_project.sh "${{ env.GCP_PROJECT_ID }}"
         # If your script needs environment variables, you can pass them here:
         # env:
         #   SOME_VAR: some-value
