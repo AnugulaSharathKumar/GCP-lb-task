@@ -43,14 +43,14 @@ echo "========================================"
 echo "⚠️  STAGE -5 : TERRAFORM DESTROY (HIGH RISK)"
 echo "========================================"
 
-read -r -p "Do you REALLY want to destroy infrastructure? (YES/NO): " DESTROY_CONFIRM
+#read -r -p "Do you REALLY want to destroy infrastructure? (YES/NO): " DESTROY_CONFIRM
 
-if [[ "$DESTROY_CONFIRM" == "YES" ]]; then
-    echo "🔥 Destroy confirmed. Proceeding..."
-    bash ./destroy.sh
-    echo "✅ Infrastructure destroyed successfully."
-else
-    echo "❌ Destroy cancelled. Exiting safely."
-    exit 0
-fi
-echo "========================================"
+#if [[ "$DESTROY_CONFIRM" == "YES" ]]; then
+#    echo "🔥 Destroy confirmed. Proceeding..."
+#    bash ./destroy.sh
+ #   echo "✅ Infrastructure destroyed successfully."
+#else
+#    echo "❌ Destroy cancelled. Exiting safely."
+#    exit 0
+#fi
+#echo "========================================"
