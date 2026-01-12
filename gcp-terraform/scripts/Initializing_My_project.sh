@@ -34,7 +34,7 @@ echo "========================================"
 echo "========================================"
 echo "Stage -4 : Terraform Deployment"
 echo "========================================"
-bash ./gcp-terraform/scripts/deploy.sh
+#bash ./gcp-terraform/scripts/deploy.sh
 
 ########################################
 # Stage -5 : Terraform Destroy (Permission Required)
